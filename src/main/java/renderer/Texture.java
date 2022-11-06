@@ -2,7 +2,6 @@ package renderer;
 
 import org.lwjgl.BufferUtils;
 
-
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
@@ -10,7 +9,6 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.stb.STBImage.*;
 
 public class Texture {
-
     private String filepath;
     private transient int texID;
     private int width, height;
@@ -33,7 +31,6 @@ public class Texture {
 
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height,
                 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
-
     }
 
     public void init(String filepath) {
@@ -44,9 +41,12 @@ public class Texture {
         glBindTexture(GL_TEXTURE_2D, texID);
 
         // Set texture parameters
+        // Repeat image in both directions
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        // When stretching the image, pixelate
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        // When shrinking an image, pixelate
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
         IntBuffer width = BufferUtils.createIntBuffer(1);
@@ -87,16 +87,16 @@ public class Texture {
         return this.width;
     }
 
+    public String getFilepath() {
+        return this.filepath;
+    }
+
     public int getHeight() {
         return this.height;
     }
 
     public int getId() {
         return texID;
-    }
-
-    public String getFilepath() {
-        return this.filepath;
     }
 
     @Override
@@ -107,6 +107,5 @@ public class Texture {
         return oTex.getWidth() == this.width && oTex.getHeight() == this.height &&
                 oTex.getId() == this.texID &&
                 oTex.getFilepath().equals(this.filepath);
-
     }
 }

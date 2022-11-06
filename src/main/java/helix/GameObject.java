@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameObject {
-
     private static int ID_COUNTER = 0;
     private int uid = -1;
 
@@ -88,6 +87,4 @@ public class GameObject {
     public List<Component> getAllComponents() {
         return this.components;
     }
-
-
 }

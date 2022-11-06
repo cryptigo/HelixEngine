@@ -3,11 +3,10 @@ package scenes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import components.Component;
+import components.ComponentDeserializer;
 import helix.Camera;
-import helix.ComponentDeserializer;
 import helix.GameObject;
 import helix.GameObjectDeserializer;
-import imgui.ImGui;
 import renderer.Renderer;
 
 import java.io.FileWriter;
@@ -16,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class Scene {
 
@@ -23,7 +23,7 @@ public abstract class Scene {
     protected Camera camera;
     private boolean isRunning = false;
     protected List<GameObject> gameObjects = new ArrayList<>();
-    protected GameObject activeGameObject = null;
+
     protected boolean levelLoaded;
 
     public Scene() {
@@ -52,20 +52,18 @@ public abstract class Scene {
         }
     }
 
+    public GameObject getGameObject(int gameObjectId) {
+        Optional<GameObject> result = this.gameObjects.stream()
+                .filter(gameObject -> gameObject.getUid() == gameObjectId)
+                .findFirst();
+        return result.orElse(null);
+    }
+
     public abstract void update(float dt);
+    public abstract void render();
 
     public Camera camera() {
         return this.camera;
-    }
-
-    public void sceneImgui() {
-        if (activeGameObject != null) {
-            ImGui.begin("Inspector");
-            activeGameObject.imgui();
-            ImGui.end();
-        }
-
-        imgui();
     }
 
     public void imgui() {
@@ -92,7 +90,7 @@ public abstract class Scene {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .registerTypeAdapter(Component.class, new ComponentDeserializer())
-                .registerTypeAdapter(GameObjectDeserializer.class, new GameObjectDeserializer())
+                .registerTypeAdapter(GameObject.class, new GameObjectDeserializer())
                 .create();
 
         String inFile = "";
@@ -101,6 +99,7 @@ public abstract class Scene {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
 
         if (!inFile.equals("")) {
             int maxGoId = -1;
@@ -118,6 +117,7 @@ public abstract class Scene {
                     maxGoId = objs[i].getUid();
                 }
             }
+
             maxGoId++;
             maxCompId++;
             GameObject.init(maxGoId);
