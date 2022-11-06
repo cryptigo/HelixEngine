@@ -7,6 +7,7 @@ import components.ComponentDeserializer;
 import helix.Camera;
 import helix.GameObject;
 import helix.GameObjectDeserializer;
+import helix.Transform;
 import renderer.Renderer;
 
 import java.io.FileWriter;
@@ -68,6 +69,13 @@ public abstract class Scene {
 
     public void imgui() {
 
+    }
+
+    public GameObject createGameObject(String name) {
+        GameObject go = new GameObject(name);
+        go.addComponent(new Transform());
+        go.transform = go.getComponent(Transform.class);
+        return go;
     }
 
     public void saveExit() {

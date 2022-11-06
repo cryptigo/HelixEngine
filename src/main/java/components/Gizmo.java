@@ -53,17 +53,14 @@ public class Gizmo extends Component {
     public void start() {
         this.xAxisObject.transform.rotation = 90;
         this.yAxisObject.transform.rotation = 180;
+        this.xAxisObject.transform.zIndex = 100;
+        this.yAxisObject.transform.zIndex = 100;
         this.xAxisObject.setNoSerialize();
         this.yAxisObject.setNoSerialize();
     }
 
     @Override
     public void update(float dt) {
-
-        if (MouseListener.isDragging()) {
-            System.out.println("Dragging");
-        }
-
         this.activeGameObject = this.propertiesWindow.getActiveGameObject();
         if (this.activeGameObject != null) {
             this.setActive();

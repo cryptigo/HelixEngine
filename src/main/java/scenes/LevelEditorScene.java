@@ -10,7 +10,7 @@ import util.AssetPool;
 public class LevelEditorScene extends Scene {
 
     private Spritesheet sprites;
-    GameObject levelEditorStuff = new GameObject("LevelEditor", new Transform(new Vector2f()), 0);
+    GameObject levelEditorStuff = this.createGameObject("LevelEditor");
 
 
     public LevelEditorScene() {
@@ -19,7 +19,6 @@ public class LevelEditorScene extends Scene {
 
     @Override
     public void init() {
-
         loadResources();
         sprites = AssetPool.getSpritesheet("assets/images/spritesheets/decorationsAndBlocks.png");
         Spritesheet gizmos = AssetPool.getSpritesheet("assets/images/gizmos.png");
@@ -69,10 +68,6 @@ public class LevelEditorScene extends Scene {
 
     @Override
     public void imgui() {
-        ImGui.begin("Level Editor Stuff");
-        levelEditorStuff.imgui();
-        ImGui.end(); // test
-
         ImGui.begin("Test window");
 
         ImVec2 windowPos = new ImVec2();
